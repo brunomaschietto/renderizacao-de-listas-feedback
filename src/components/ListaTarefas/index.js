@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   InputContainer,
   ListaContainer,
@@ -7,46 +6,34 @@ import {
   TaskInput,
   AddTaskButton,
   RemoveButton,
-  LinhaHorizontal
+  LinhaHorizontal,
+  LinhaRiscada,
 } from "./styled";
 import bin from "../../assets/bin.png";
 
-export function ListaTarefas() {
-  const [lista, setLista] = useState(["Fazer exercícios", "Estudar React"]);
-  const [novaTarefa, setNovaTarefa] = useState("");
-
-  const onChangeTarefa = (event) => {
-    setNovaTarefa(event.target.value);
-  };
-
-  const adicionaTarefa = () => {
-    const novaLista = [...lista, novaTarefa];
-    setLista(novaLista);
-    setNovaTarefa("");
-  };
-
-  const removeTarefa = (tarefa) => {
-    const listaFiltrada = lista.filter((item) => item !== tarefa);
-    setLista(listaFiltrada);
-  };
-
+export function ListaTarefas(props) {
   return (
     <ListaTarefasContainer>
       <InputContainer>
         <TaskInput
           placeholder="Digite aqui uma tarefa"
-          value={novaTarefa}
-          onChange={onChangeTarefa}
+          value={props.novaTarefa}
+          onChange={props.onChangeTarefa}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              props.adicionaTarefa();
+            }
+          }}
         />
-        <AddTaskButton onClick={adicionaTarefa}>Adicionar</AddTaskButton>
+        <AddTaskButton onClick={props.adicionaTarefa}>Adicionar</AddTaskButton>
       </InputContainer>
       <ListaContainer>
         <ul>
-          {lista.map((tarefa, index) => {
+          {props.lista.map((tarefa, index) => {
             return (
               <Tarefa key={index}>
                 <p>{tarefa}</p>
-                <RemoveButton onClick={() => removeTarefa(tarefa)}>
+                <RemoveButton onClick={() => props.removeTarefa(tarefa)}>
                   <img src={bin} alt="" width="16px" />
                 </RemoveButton>
               </Tarefa>
@@ -54,7 +41,19 @@ export function ListaTarefas() {
           })}
         </ul>
       </ListaContainer>
-      <LinhaHorizontal/>
+      <LinhaHorizontal />
+      <ListaContainer>
+        <h1>Lista Concluida</h1>
+        <ul>
+          {props.listaConcluida.map((tarefa, index) => {
+            return (
+              <Tarefa key={index}>
+                <LinhaRiscada>{tarefa}</LinhaRiscada>
+              </Tarefa>
+            );
+          })}
+        </ul>
+      </ListaContainer>
     </ListaTarefasContainer>
   );
 }

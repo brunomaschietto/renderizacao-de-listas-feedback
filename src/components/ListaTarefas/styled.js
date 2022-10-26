@@ -71,4 +71,9 @@ export const Tarefa = styled.li`
 export const LinhaHorizontal = styled.hr`
   width: 100%;
   margin: 16px;
-`
+`;
+
+export const LinhaRiscada = styled.p`
+  text-decoration: line-through;
+  opacity: 0.6;
+`;
